@@ -1,0 +1,23 @@
+new: simp 1 1 24499 "blnk" 0 0 0
+tick 1
+
+scrp 1 1 24499 9
+	enum 4 0 0
+*	agnt 
+		seta va90 targ
+*	numb moniker = targ.Mokiker(0)
+		sets va91 gtos 0
+		sets va00 va91
+		adds va00 "-"
+		adds va00 vtos hist coun va91
+		targ va90
+		snap va00 posx posy 119 139 100
+		hist evnt va91 13 "" ""
+		setv va01 hist coun va91
+		subv va01 1
+		dbg: asrt 13 = hist type va91 va01
+		hist foto va91 va01 va00
+		wait 10
+	next
+	kill ownr
+endm
