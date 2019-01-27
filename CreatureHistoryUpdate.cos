@@ -1,0 +1,697 @@
+* selected creature changed
+scrp 1 2 23 120
+	inst
+	doif _p1_ <> null
+		setv ov32 0
+		mesg wrt+ ownr 999 _p1_ 0 0
+	endi
+endm
+
+* page 1 button
+scrp 1 2 23 2003
+	inst
+	snde "cmc4"
+	setv ov12 1001
+	setv ov32 0
+	mesg writ ownr 256
+endm
+
+* page 2 button
+scrp 1 2 23 2004
+	inst
+	snde "cmc4"
+	setv ov12 1002
+	setv ov32 0
+	mesg writ ownr 256
+endm
+
+* page 3 button
+scrp 1 2 23 2005
+	inst
+	snde "cmc4"
+	setv ov12 1003
+	setv ov32 0
+	mesg writ ownr 256
+endm
+
+* page 4 button
+scrp 1 2 23 2006
+	inst
+	snde "cmc4"
+	setv ov12 1004
+	setv ov32 0
+	mesg writ ownr 256
+endm
+
+* Event make
+scrp 1 2 23 1002
+	inst
+	setv va00 1
+	reps 100
+		pat: kill va00
+		addv va00 1
+	repe
+	part 0
+	pose 2
+	doif ov32 <> -1
+*		Mon1 button
+		pat: butt 2 "ds_creature_history" 10 7 160 52 2 [] 2013 0
+		part 2
+		pose 6
+
+*		Mon2 button
+		pat: butt 3 "ds_creature_history" 10 7 300 52 1 [] 2014 0
+		part 3
+		pose 6
+
+*		Mon1 name
+		pat: fixd 4 "ds_creature_history" 1 180 52 1 "WhiteOnTransparentChars"
+
+*		Mon2 name
+		pat: fixd 5 "ds_creature_history" 1 320 52 1 "WhiteOnTransparentChars"
+
+*		Event date & time
+		pat: fixd 6 "ds_creature_history" 41 42 220 0 "WhiteOnTransparentChars"
+
+*		Event desc
+		pat: fixd 7 "ds_creature_history" 41 42 270 0 "WhiteOnTransparentChars"
+
+*		Event age and lifestage
+		pat: fixd 30 "ds_creature_history" 41 42 295 0 "WhiteOnTransparentChars"
+
+*		Event location (User and world)
+		pat: fixd 33 "ds_creature_history" 41 175 220 1 "WhiteOnTransparentChars"
+
+* Go to events:
+*(use parts 20-26 for debugging, showes event #'s for scrolling if they exist)
+*		left 3
+		pat: butt 10 "ds_creature_history" 1 9 35 340 1 [] 2015 1
+
+*		left 2
+		pat: butt 11 "ds_creature_history" 1 9 85 340 1 [] 2016 1
+
+*		left 1
+		pat: butt 12 "ds_creature_history" 1 9 135 340 1 [] 2017 1
+		pat: fixd 22 "ds_creature_history" 1 140 328 1 "WhiteOnTransparentChars"
+
+*		center
+		pat: dull 13 "ds_creature_history" 1 210 340 1
+		part 13
+		tint 175 175 175 127 127
+
+*		right 1
+		pat: butt 14 "ds_creature_history" 1 9 285 340 1 [] 2018 1
+
+*		right 2
+		pat: butt 15 "ds_creature_history" 1 9 335 340 1 [] 2019 1
+
+
+*		right 3
+		pat: butt 16 "ds_creature_history" 1 9 385 340 1 [] 2025 1
+
+*		pat: fixd 20 "ds_creature_history" 1 40 328 1 "WhiteOnTransparentChars"
+*		pat: fixd 21 "ds_creature_history" 1 90 328 1 "WhiteOnTransparentChars"
+*		pat: fixd 23 "ds_creature_history" 1 220 328 1 "WhiteOnTransparentChars"
+*		pat: fixd 24 "ds_creature_history" 1 290 328 1 "WhiteOnTransparentChars"
+*		pat: fixd 25 "ds_creature_history" 1 340 328 1 "WhiteOnTransparentChars"
+*		pat: fixd 26 "ds_creature_history" 1 390 328 1 "WhiteOnTransparentChars"
+
+*		part 17 camera norn
+
+*		part 18 mon1
+
+*		part 19 mon2
+
+		mesg writ ownr 2010
+	endi
+endm
+
+* Event rephresh
+scrp 1 2 23 2010
+	inst
+* ov01 norn moniker
+* ov32 event #
+* va00 mon1 moniker
+	sets va00 hist mon1 ov01 ov32
+* va01 mon2 moniker
+	sets va01 hist mon2 ov01 ov32
+* va02 hist name mon1
+	sets va02 hist name va00
+	doif va02 = ""
+		sets va02 "?"
+	endi
+* va03 hist name mon2
+	sets va03 hist name va01
+	doif va03 = ""
+		sets va03 "?"
+	endi
+* va04 hist type
+	setv va04 hist type ov01 ov32
+* va05 hist life stage
+	setv va05 hist cage ov01 ov32
+
+	doif va04 <> 2
+* mon2/mon2 buttons and names
+		doif va00 <> ""
+*		Mon1 name 4
+			part 4
+			ptxt va02
+*		Mon1 button 2
+			part 2
+*		is this an event that requires an egg button?
+			doif va04 = 8 or va04 = 9 or va04 = 10 or va04 = 12
+				pose 0
+			else
+				doif hist gend va00 = 1
+					pose 2
+				elif hist gend va00 = 2
+					pose 4
+				endi
+			endi
+		else
+*		no one here, make it blank, otherwise it showes last shown name
+			part 4
+			ptxt ""
+			part 2
+			pose 6
+		endi
+		doif va01 <> ""
+*		Mon2 name 5
+			part 5
+			ptxt va03
+*		Mon2 button 3
+			part 3
+			doif hist gend va01 = 1
+				pose 2
+			elif hist gend va01 = 2
+				pose 4
+			endi
+		else
+*		no one here, make it blank, otherwise it showes last shown name
+			part 5
+			ptxt ""
+			part 3
+			pose 6
+		endi
+	endi
+
+************
+***Photos***
+************
+* camera or photo norn, camera if alive and no associated photo
+*	search for next life event photo, for birth and death events
+	sets va50 hist foto ov01 ov32
+	doif va50 = ""
+		setv va51 ov32
+		addv va51 1
+		setv va52 hist coun ov01
+		subv va52 1
+		doif va51 <= va52
+			doif hist type ov01 va51 = 13
+				sets va50 hist foto ov01 va51
+			else
+				sets va50 ""
+			endi
+		else
+			sets va50 ""
+		endi
+	endi
+	doif snax va50 = 0
+		sets va50 ""
+	endi
+	doif va50 = ""
+*	There is no photo for event
+		pat: kill 17
+		pat: cmra 17 "ds_creature_history" 38 32 75 1 119 139 119 139
+		scam ownr 17
+		trck ov00 0 0 2 0
+	elif va50 <> ""
+		pat: kill 17
+		pat: dull 17 va50 0 42 75 0
+	else
+		pat: kill 17
+		pat: cmra 17 "ds_creature_history" 38 32 75 1 119 139 119 139
+	endi
+
+	doif va00 <> ""
+* camera or photo mon1, camera if in world.
+		doif mtoa va00 <> null
+			pat: kill 18
+			pat: cmra 18 "ds_creature_history" 38 170 75 1 119 139 119 139
+			scam ownr 18
+			trck mtoa va00 0 0 2 0
+		else
+* not in world, search for recent photo
+			setv va50 -1
+			sets va52 ""
+			loop
+				setv va50 hist finr va00 13 va50
+				doif va50 <> -1
+					sets va52 hist foto va00 va50
+				endi
+			untl va52 <> "" or va50 = -1
+			doif va52 = "" or va50 = -1
+* no photos of this norn were ever taken
+				pat: kill 18
+				pat: cmra 18 "ds_creature_history" 38 170 75 1 119 139 119 139
+			else
+				pat: kill 18
+				pat: dull 18 hist foto va00 va50 0 170 75 0
+			endi
+		endi
+	else
+		pat: kill 18
+		pat: cmra 18 "ds_creature_history" 38 170 75 1 119 139 119 139
+	endi
+
+
+	doif va01 <> ""
+* camera or photo mon2, camera if in world.
+		doif mtoa va01 <> null
+			pat: kill 19
+			pat: cmra 19 "ds_creature_history" 38 310 75 1 119 139 119 139
+			scam ownr 19
+			trck mtoa va01 0 0 2 0
+		else
+* not in world, search for recent photo
+			setv va50 -1
+			sets va52 ""
+			loop
+				setv va50 hist finr va01 13 va50
+				doif va50 <> -1
+					sets va52 hist foto va01 va50
+				endi
+			untl va52 <> "" or va50 = -1
+			doif va50 = -1 or va52 = ""
+* no photos of this norn were ever taken
+				pat: kill 19
+				pat: cmra 19 "ds_creature_history" 38 310 75 1 119 139 119 139
+			else
+				pat: kill 19
+				pat: dull 19 hist foto va01 va50 0 310 75 0
+			endi
+		endi
+	else
+		pat: kill 19
+		pat: cmra 19 "ds_creature_history" 38 310 75 1 119 139 119 139
+	endi
+	setv va50 0
+*************
+***/Photos***
+*************
+
+*************************************************************
+***Event date & time / desc / age and lifestage / location***
+*************************************************************
+* Event date & time
+	sets va50 rtif hist rtim ov01 ov32 "%I:%M %p\n%A, Week %U\n%B %d, %Y"
+	part 6
+	ptxt va50
+* Event desc 7
+	doif va04 <> 4 and va04 <> 2 and va04 >= 0 and va04 <= 17
+		sets va50 read "creature_history_event_names" va04
+	elif va04 = 4
+		sets va50 "Became "
+		adds va50 read "creature_history_life_stage" va05
+	elif va04 = 2
+		sets va50 read "creature_history_event_names" va04
+		adds va50 " from "
+		adds va50 hist mon2 ov01 ov32
+	else
+		sets va50 "Strange, it's not suposed to do that"
+	endi
+	part 7
+	ptxt va50
+* Event age and lifestage 30
+* age in ticks
+	setv va51 hist tage ov01 ov32
+*	convert to seconds
+	divv va51 20
+*	convert to minuts
+	divv va51 60
+
+	setv va55 va51
+	divv va55 60
+
+	setv va56 va51
+	modv va56 60
+
+	sets va50 vtos va55
+	adds va50 " hours and "
+	adds va50 vtos va56
+	adds va50 " minutes\n"
+	doif va04 <> 4
+		doif va05 <> -1
+			adds va50 read "creature_history_life_stage" va05
+		else
+			adds va50 "Unborn"
+		endi
+	endi
+	part 30
+	ptxt va50
+* Event location (User and world) 33
+	sets va50 "World: "
+	adds va50 hist wnam ov01 ov32
+	part 33
+	ptxt va50
+**************************************************************
+***/Event date & time / desc / age and lifestage / location***
+**************************************************************
+
+******************
+***damn buttons***
+******************
+*ov40 left 3 event #
+*ov41 left 2 event #
+*ov42 left 1 event #
+*ov43 right 1 event #
+*ov44 right 2 event #
+*ov45 right 3 event #
+*left 1
+	setv va50 0
+	setv ov42 ov32
+	loop
+		subv ov42 1
+*		doif < 0, no event
+		doif ov42 < 0
+			setv va50 1
+		else
+			setv va52 hist type ov01 ov42
+*			doif accaptable event type, except aged
+			doif va52 = 0 or va52 = 1 or va52 = 2 or va52 = 3 or va52 = 5 or va52 = 6 or va52 = 7 or va52 = 8 or va52 = 9 or va52 = 10 or va52 = 11 or va52 = 12 or va52 = 14 or va52 = 15 or va52 = 16 or va52 = 17
+				setv va50 1
+*			doif aged but not death event
+			elif va52 = 4 and va05 <> 7
+				setv va50 1
+			endi
+		endi
+	untl va50 = 1
+	setv va50 0
+*left 2
+	setv ov41 ov42
+	loop
+		subv ov41 1
+*		doif < 0, no event
+		doif ov41 < 0
+			setv va50 1
+		else
+			setv va51 hist type ov01 ov41
+*			doif accaptable event type, except aged
+			doif va51 = 0 or va51 = 1 or va51 = 2 or va51 = 3 or va51 = 5 or va51 = 6 or va51 = 7 or va51 = 8 or va51 = 9 or va51 = 10 or va51 = 11 or va51 = 12 or va51 = 14 or va51 = 15 or va51 = 16 or va51 = 17
+				setv va50 1
+*			doif aged but not death event
+			elif va51 = 4 and va05 <> 7
+				setv va50 1
+			endi
+		endi
+	untl va50 = 1
+	setv va50 0
+*left 3
+	setv ov40 ov41
+	loop
+		subv ov40 1
+*		doif < 0, no event
+		doif ov40 < 0
+			setv va50 1
+		else
+			setv va50 hist type ov01 ov40
+*		doif accaptable event type, except aged
+			doif va50 = 0 or va50 = 1 or va50 = 2 or va50 = 3 or va50 = 5 or va50 = 6 or va50 = 7 or va50 = 8 or va50 = 9 or va50 = 10 or va50 = 11 or va50 = 12 or va50 = 14 or va50 = 15 or va50 = 16 or va50 = 17
+				setv va50 1
+*		doif aged but not death event
+			elif va50 = 4 and va05 <> 7
+				setv va50 1
+			endi
+		endi
+	untl va50 = 1
+	setv va50 0
+
+*	last event
+	setv va60 hist coun ov01
+	subv va60 1
+
+*right 1
+	setv ov43 ov32
+	loop
+		addv ov43 1
+*		doif < 0, no event
+		doif ov43 < 0 or ov43 >= va60
+			setv va50 1
+		else
+			setv va53 hist type ov01 ov43
+*		doif accaptable event type, except aged
+			doif va53 = 0 or va53 = 1 or va53 = 2 or va53 = 3 or va53 = 5 or va53 = 6 or va53 = 7 or va53 = 8 or va53 = 9 or va53 = 10 or va53 = 11 or va53 = 12 or va53 = 14 or va53 = 15 or va53 = 16 or va53 = 17
+				setv va50 1
+*		doif aged but not death event
+			elif va53 = 4 and va05 <> 7
+				setv va50 1
+			endi
+		endi
+	untl va50 = 1
+	setv va50 0
+* right 2
+	setv ov44 ov43
+	loop
+		addv ov44 1
+*		doif < 0, no event
+		doif ov44 < 0 or ov44 >= va60
+			setv va50 1
+		else
+			setv va54 hist type ov01 ov44
+*		doif accaptable event type, except aged
+			doif va54 = 0 or va54 = 1 or va54 = 2 or va54 = 3 or va54 = 5 or va54 = 6 or va54 = 7 or va54 = 8 or va54 = 9 or va54 = 10 or va54 = 11 or va54 = 12 or va54 = 14 or va54 = 15 or va54 = 16 or va54 = 17
+				setv va50 1
+*		doif aged but not death event
+			elif va54 = 4 and va05 <> 7
+				setv va50 1
+			endi
+		endi
+	untl va50 = 1
+	setv va50 0
+* right 3
+	setv ov45 ov44
+	loop
+		addv ov45 1
+*		doif < 0, no event
+		doif ov45 < 0 or ov45 >= va60
+			setv va50 1
+		else
+			setv va55 hist type ov01 ov45
+*		doif accaptable event type, except aged
+			doif va55 = 0 or va55 = 1 or va55 = 2 or va55 = 3 or va55 = 5 or va55 = 6 or va55 = 7 or va55 = 8 or va55 = 9 or va55 = 10 or va55 = 11 or va55 = 12 or va55 = 14 or va55 = 15 or va55 = 16 or va55 = 17
+				setv va50 1
+*		doif aged but not death event
+			elif va55 = 4 and va05 <> 7
+				setv va50 1
+			endi
+		endi
+	untl va50 = 1
+	setv va50 0
+*	set all right over highest event # to -1
+
+*ov40 left 3 event #
+*ov41 left 2 event #
+*ov42 left 1 event #
+*ov43 right 1 event #
+*ov44 right 2 event #
+*ov45 right 3 event #
+
+	doif ov43 > va60
+		setv ov43 -1
+	endi
+	doif ov44 > va60
+		setv ov44 -1
+	endi
+	doif ov45 > va60
+		setv ov45 -1
+	endi
+
+*0 Conceived		*
+*1 Spliced			*
+*2 Engineered		*
+*3 Born			*
+*4 Aged if va05 <> 7	*
+*5 Exported			*
+*6 Imported			*
+*7 Died			*
+*8 Became pregnant	*
+*9 Impregnated		*
+*10 Child born		*
+*11 Laid by mother	*
+*12 Laid an egg		*
+
+*14 Cloned			*
+*15 Clone source		*
+*16 Warped out		*
+*17 Warped in		*
+
+	setv va50 10
+	loop
+		part va50
+		pose 0
+		doif va50 = 10
+			setv va51 ov40
+		elif va50 = 11
+			setv va51 ov41
+		elif va50 = 12
+			setv va51 ov42
+		elif va50 = 13
+			setv va51 va04
+		elif va50 = 14
+			setv va51 ov43
+		elif va50 = 15
+			setv va51 ov44
+		elif va50 = 16
+			setv va51 ov45
+		endi
+
+		doif va51 < 0
+			setv va51 -1
+		elif va50 <> 13
+			setv va51 hist type ov01 va51
+		endi
+
+		doif va51 = 7
+*			gravestone
+			pose 2
+		elif va51 = 11 or va51 = 12
+*			egg
+			pose 3
+		elif va51 = 10 or va51 = 3
+*			hatching egg
+			pose 4
+		elif va51 = 0 or va51 = 1 or va51 = 8 or va51 = 9
+*			pregnant
+			pose 5
+		elif va51 = 4 and va05 <> 7
+*			norn
+			pose 6
+		elif va51 = 2 or va51 = 6 or va51 = 17 or va51 = 14
+*			* + *
+			pose 7
+		elif va51 = 16 or va51 = 5 or va51 = 15
+*			* - *
+			pose 8
+		elif va51 < 0
+			pose 0
+		endi
+
+		addv va50 1
+	untl va50 > 16
+
+	doif part 20 = 1
+*		left 3
+		part 20
+		ptxt vtos ov40
+
+*		left 2
+		part 21
+		ptxt vtos ov41
+
+*		left 1
+		part 22
+		ptxt vtos ov42
+
+*		center
+		part 23
+		ptxt vtos ov32
+
+*		right 1
+		part 24
+		ptxt vtos ov43
+
+*		right 2
+		part 25
+		ptxt vtos ov44
+
+*		right 3
+		part 26
+		ptxt vtos ov45
+	endi
+
+**************
+***/buttons***
+**************
+endm
+
+* Goto mon1
+scrp 1 2 23 2013
+	inst
+	setv va00 ooww hist mon1 ov01 ov32
+	doif va00 <> 7 and va00 <> 0
+		sets ov11 hist mon1 ov01 ov32
+		seta ov10 mtoa ov11
+		setv ov32 0
+		mesg writ ownr 256
+	endi
+endm
+
+* Goto mon2
+scrp 1 2 23 2014
+	inst
+	setv va00 ooww hist mon2 ov01 ov32
+	doif va00 <> 7 and va00 <> 0
+		sets ov11 hist mon2 ov01 ov32
+		seta ov10 mtoa ov11
+		setv ov32 0
+		mesg writ ownr 256
+	endi
+endm
+
+**Bottom scroll
+* left 3
+scrp 1 2 23 2015
+	setv ov32 ov40
+	pat: kill 17
+	pat: kill 18
+	pat: kill 19
+	mesg writ ownr 2010
+endm
+
+*left 2
+scrp 1 2 23 2016
+	setv ov32 ov41
+	pat: kill 17
+	pat: kill 18
+	pat: kill 19
+	mesg writ ownr 2010
+endm
+
+*left 1
+scrp 1 2 23 2017
+	setv ov32 ov42
+	pat: kill 17
+	pat: kill 18
+	pat: kill 19
+	mesg writ ownr 2010
+endm
+
+*right 1
+scrp 1 2 23 2018
+	setv ov32 ov43
+	pat: kill 17
+	pat: kill 18
+	pat: kill 19
+	mesg writ ownr 2010
+endm
+
+*right 2
+scrp 1 2 23 2019
+	setv ov32 ov44
+	pat: kill 17
+	pat: kill 18
+	pat: kill 19
+	mesg writ ownr 2010
+endm
+
+*right 3
+scrp 1 2 23 2025
+	setv ov32 ov45
+	pat: kill 17
+	pat: kill 18
+	pat: kill 19
+	mesg writ ownr 2010
+endm
+
+rscr
+ject "ds creature history.cos" 2
