@@ -1,0 +1,1183 @@
+*$Id: ds040gui040-040options.cos,v 1.16 2001/03/09 12:22:57 aharman Exp $
+*+--------------------+
+*|                    |
+*|    GUI: Options    |
+*|                    |
+*+--------------------+
+** Create the Options Menu
+new: comp 1 2 12 "ds gui" 1 1 8900
+**set in/put flag
+*-1=in, +1=out
+setv ov99 -1
+*************************
+** [AUDIO START]       **
+*************************
+** Volume Toggle Button
+pat: butt 26 "ds gui" 64 2 106 11 0 [] 1026 0
+sets name "vol" "music"
+*sound effects button
+pat: butt 3 "ds gui" 58 2 145 13 0 [] 1002 0
+part 3
+pose 0
+*music button
+pat: butt 4 "ds gui" 60 2 146 44 0 [] 1003 0
+part 4
+pose 0
+** Norn Burble Button
+pat: butt 18 "ds gui" 62 2 145 71 0 [] 1015 0
+part 3
+pose 0
+** VOLUME CONTROL
+pat: butt 17 "ds gui" 43 5 103 40 0 [] 1016 0
+** Set Volume part to "full volume"
+part 17
+pose 4
+volm 2 0
+volm 0 0
+setv game "sfx_volume" 0
+setv game "music_volume" 0
+*sfx text
+pat: fixd 9 "ds gui" 31 170 18 0 "WhiteOnTransparentChars"
+sets va00 read "Option Text" 4
+part 9
+frmt 2 2 0 0 0 0 3
+ptxt va00
+*music text
+pat: fixd 10 "ds gui" 31 170 51 0 "WhiteOnTransparentChars"
+sets va00 read "Option Text" 6
+part 10
+frmt 2 2 0 0 0 0 3
+ptxt va00
+** Norn Burble on/off Text
+pat: fixd 12 "ds gui" 31 170 85 0 "WhiteOnTransparentChars"
+sets va00 read "Option Text" 8
+part 12
+frmt 2 2 0 0 0 0 3
+ptxt va00
+
+
+** What state are the voices now?
+doif game "engine_dumb_creatures" = 0
+	part 18
+	pose 0
+	part 12
+	frmt 0 0 0 0 0 0 0
+	ptxt read "Option Text" 8
+elif game "engine_dumb_creatures" = 1
+	part 18
+	pose 1
+	part 12
+	frmt 0 0 0 0 0 0 0
+	ptxt read "Option Text" 9
+endi
+
+************************
+** [AUDIO FINISH]     **
+** [POPULATION START] **
+************************
+pat: text 24 "ds gui" 48 307 39 0 1024 "GreyOnTransChars"
+part 24
+frmt 0 0 0 0 0 0 2
+sets va88 "<tint 110 255 110>"
+adds va88 vtos game "total_population"
+ptxt va88
+
+pat: text 25 "ds gui" 48 307 80 0 1025 "GreyOnTransChars"
+part 25
+frmt 0 0 0 0 0 0 2
+sets va88 "<tint 110 255 110>"
+adds va88 vtos game "breeding_limit"
+ptxt va88
+
+*************************
+** [POPULATION FINISH] **
+** [LEFT PARTS START]  **
+*************************
+** Quit Button
+pat: butt 1 "ds gui" 33 2 47 13 0 [] 1000 0
+part 1
+anim [0]
+** Quit Button Text
+pat: fixd 8 "ds gui" 30 12 43 0 "WhiteOnTransparentChars"
+sets va00 read "Option Text" 3
+part 8
+frmt 0 0 0 0 0 0 2
+ptxt va00
+* Pause Button
+pat: butt 2 "ds gui" 35 2 47 57 0 [] 1001 0
+** Pause Button Text
+pat: fixd 7 "ds gui" 30 12 86 0 "WhiteOnTransparentChars"
+sets va00 read "Option Text" 1
+part 7
+frmt 0 0 0 0 0 0 2
+ptxt va00
+* About Button
+pat: butt 5 "ds gui" 37 2 47 103 0 [] 1004 0
+** About Button Text
+pat: fixd 6 "ds gui" 30 12 133 0 "WhiteOnTransparentChars"
+sets va00 read "Option Text" 0
+part 6
+frmt 0 0 0 0 0 0 2
+ptxt va00
+* Screen Toggle Button
+pat: butt 19 "ds gui" 39 2 47 147 0 [] 1014 0
+** Screen Toggle Button Text
+pat: fixd 20 "ds gui" 30 12 175 0 "WhiteOnTransparentChars"
+doif wdow = 0
+	sets name "screen" "windowed"
+	sets va00 read "Option Text" 10
+elif wdow = 1
+	sets name "screen" "full"
+	sets va00 read "Option Text" 11
+endi
+part 20
+frmt 0 0 0 0 0 0 2
+ptxt va00
+*************************
+** [LEFT PARTS FINISH] **
+** [HAND STUFF START]  **
+*************************
+** Name the Hand
+pat: text 11 "ds gui" 31 137 118 0 1005 "WhiteOnTransparentChars"
+part 11
+frmt 2 2 0 0 0 0 0
+hand "hand"
+ptxt hand
+* Hand
+pat: butt 13 "tinted_hand" 0 1 285 140 0 [] 1017 1
+** Normal / Custom Hand Toggle Button
+pat: butt 21 "ds gui" 41 2 103 156 0 [] 1017 0
+** Normal / Custom Hand Toggle Text
+pat: fixd 22 "ds gui" 31 142 169 0 "WhiteOnTransparentChars"
+part 22
+frmt 0 0 0 0 0 0 0
+ptxt read "Option Text" 12
+** Name variable
+sets name "hand" "normal"
+** Red
+pat: butt 14 "custom hand red" 0 2 281 119 0 [] 1011 1
+setv game "pntr_Red" 128
+part 14
+tint game "pntr_Red" 0 0 128 128
+part 14
+pose 1
+** Green
+pat: butt 15 "custom hand green" 0 2 312 119 0 [] 1012 1
+setv game "pntr_Green" 128
+part 15
+tint 0 game "pntr_Green" 0 128 128
+part 15
+pose 1
+** Blue
+pat: butt 16 "custom hand blue" 0 2 304 147 0 [] 1013 1
+setv game "pntr_Blue" 128
+part 16
+tint 0 0 game "pntr_Blue" 128 128
+part 16
+pose 1
+** tint the hand
+part 13
+tint game "pntr_Red" game "pntr_Green" game "pntr_Blue" 128 128
+part 13
+alph 128 1
+
+** Red level indicator
+pat: fixd 27 "ds gui" 54 303 125 1 "WhiteOnTransparentChars"
+part 27
+frmt 0 0 0 0 0 0 0
+ptxt "4"
+part 27
+alph 255 1
+* Green level indicator
+pat: fixd 28 "ds gui" 54 327 132 1 "WhiteOnTransparentChars"
+part 28
+frmt 0 0 0 0 0 0 0
+ptxt "4"
+part 28
+alph 255 1
+* Blue level indicator
+pat: fixd 29 "ds gui" 54 334 157 1 "WhiteOnTransparentChars"
+part 29
+frmt 0 0 0 0 0 0 0
+ptxt "4"
+part 29
+alph 255 1
+*************************
+** [HAND STUFF FINISH] **
+*************************
+
+** Close / Open Button
+pat: butt 30 "ds gui" 77 1 0 0 0 [] 1020 0
+
+
+attr 304
+perm 60
+setv ov10 29
+setv ov11 198
+setv va10 wndw
+subv va10 ov10
+flto va10 ov11
+seta game "ds_gui_options" targ
+** Listen for Mouse Downs :)
+imsk 8
+** The timer just updates things like the Screen Mode
+tick 50
+
+
+** Scripts below this point are mostly untouched from Creatures 3
+**
+
+scrp 1 2 34 1000
+	part 2
+	anim [0 1]
+	wait 10
+	kill ownr
+endm
+*********
+*********
+***page down
+scrp 1 2 34 1001
+	part 1
+	setv va99 page
+	setv va06 npgs
+	addv va99 1
+
+	doif va99 < npgs
+		part 4
+		anim [ 2 2 2 ]
+		over
+		part 1
+		page va99
+	endi
+
+* set page counter
+	mesg writ ownr 1003
+endm
+*********
+***page up
+scrp 1 2 34 1002
+	part 1
+	setv va99 page
+
+	doif va99 > 0
+		part 5
+		anim [ 2 2 2 ]
+		over
+		part 1
+		subv va99 1
+		page va99
+	endi
+
+* set page counter
+	mesg writ ownr 1003
+endm
+
+* set page counter
+scrp 1 2 34 1003
+	inst
+
+* get number of pages and current page
+	part 1
+	setv va06 npgs
+	setv va07 page
+	addv va07 1
+
+* set page number text
+	sets va08 vtos va07
+	adds va08 "/"
+	adds va08 vtos va06
+	part 6
+	ptxt va08
+
+* set pgup button
+	part 5
+	doif va07 = 1
+		anim [0]
+	else
+		anim [1]
+	endi
+
+* set pgdn button
+	part 4
+	doif va07 = va06
+		anim [0]
+	else
+		anim [1]
+	endi
+endm
+** Rename the Hand
+scrp 1 2 12 1005
+	snde "3bep"
+	part 11
+	hand ptxt
+	targ game "c3_default_focus"
+	part game "c3_default_focus_part"
+	fcus
+endm
+*********
+*option quit
+scrp 1 2 12 1000
+	sndc "lg_1"
+	part 1
+	anim [1 1 1 1 1 0]
+	inst
+* removed any quit dialog which is up
+	rtar 1 2 6
+	mesg wrt+ targ 73 27 0 0
+	slow
+endm
+*option pause
+scrp 1 2 12 1001
+	inst
+	sndc "lg_1"
+	doif ov00 eq 0
+		part 2
+		pose 1
+		sets va52 read "Option Text" 2
+		part 7
+		ptxt va52
+
+		setv ov00 1
+		wpau 1
+		enum 1 0 0
+			doif gnus eq 2 and spcs eq 12
+				paus 0
+*			if(i=Is(DsCaosCommandLine))
+			elif gnus eq 2 and spcs eq 203
+
+			else
+				paus 1
+			endi
+		next
+		enum 2 0 0
+			doif gnus eq 1 and spcs eq 1
+				paus 0
+			else
+				paus 1
+			endi
+		next
+		enum 3 0 0
+*			doif gnus ne 3 and spcs ne 103
+			paus 1
+*			endi
+		next
+		enum 4 0 0
+			paus 1
+		next
+		enum 1 2 6
+			paus 0
+		next
+	else
+		wpau 0
+		enum 1 0 0
+			paus 0
+		next
+		enum 2 0 0
+			paus 0
+		next
+		enum 3 0 0
+			paus 0
+		next
+		enum 4 0 0
+			paus 0
+		next
+
+		part 2
+		pose 0
+		sets va52 read "Option Text" 1
+		part 7
+		ptxt va52
+		setv ov00 0
+	endi
+*	rtar 3 3 103
+*	mesg writ targ 1001
+endm
+
+*option music
+scrp 1 2 12 1003
+	sndc "lg_1"
+	part 4
+	doif pose eq 0
+		pose 1
+		sets va52 read "Option Text" 7
+		part 10
+		ptxt va52
+	else
+		pose 0
+		sets va52 read "Option Text" 6
+		part 10
+		ptxt va52
+	endi
+	setv va00 mute 3 2
+endm
+* option about
+scrp 1 2 12 1004
+	sndc "lg_1"
+	inst
+* Check for existing About box
+	setv va99 1
+	enum 1 2 34
+		setv va99 0
+	next
+	doif va99 ne 0
+		part 5
+		anim [1 1 1 1 1 0]
+		lock
+		slow
+		over
+		inst
+		new: comp 1 2 34 "useful_screen" 1 0 9045
+		attr 304
+* the description text
+		pat: fixd 1 "useful_screen" 1 25 59 1 "WhiteOnTransparentChars"
+		part 1
+*		frmt 8 8 8 8 3 0 0
+		frmt 8 6 7 0 3 0 2
+
+		sets va00 read "About Box" 1
+		ptxt va00
+
+* the name of agent text
+		pat: fixd 3 "useful_screen" 12 22 25 1 "WhiteOnTransparentChars"
+		part 3
+		sets va00 read "About Box" 0
+		adds va00 vtos vmjr
+		adds va00 "."
+		adds va00 vtos vmnr
+		doif reaq "build_number" = 1
+			adds va00 "/"
+			adds va00 read "build_number" 0
+		elif reaq "patch_level" = 1
+			adds va00 "/"
+			adds va00 read "patch_level" 0
+		endi
+		ptxt va00
+		setv va90 wndw
+		divv va90 2
+		setv va91 wndh
+		divv va91 2
+		setv va92 wdth
+		divv va92 2
+		setv va93 hght
+		divv va93 2
+
+		subv va90 va92
+		subv va91 va93
+
+		flto va90 va91
+* close button
+		pat: butt 2 "useful_screen" 2 2 237 24 0 [] 1000 0
+* pgdn button
+		pat: butt 4 "useful_screen" 9 3 238 302 0 [] 1001 0
+* pgup button
+		pat: butt 5 "useful_screen" 6 3 20 302 0 [] 1002 0
+* page counter
+		pat: fixd 6 "useful_screen" 15 119 306 1 "WhiteOnTransparentChars"
+		mesg writ targ 1003
+	endi
+endm
+*****ADDED FOR C3 UPDATE 2
+***gets the state of the sfx and music and sets
+***the check box images to represent the state
+scrp 1 2 12 123
+	inst
+	setv va00 mute 3 0
+*0=no mute
+*1=sfx mute
+*2=music mute
+*3=both muted
+
+*set both to start with
+	gsub none
+
+*if both muted
+	doif va00 eq 3
+		gsub sfx_
+		gsub musi
+		setv game "engine_dumb_creatures" 1
+	endi
+
+*if sfx muted
+	doif va00 eq 1
+		gsub sfx_
+		setv game "engine_dumb_creatures" 1
+	endi
+
+*if music muted
+	doif va00 eq 2
+		gsub musi
+	endi
+	doif ov99 lt 0
+		setv va10 wndw
+		subv va10 ov10
+		flto va10 ov11
+	else
+		mesg writ ownr 1020
+	endi
+
+** Now for volume levels..
+
+	volm 0 game "sfx_volume"
+	volm 2 game "music_volume"
+	doif name "vol" = "music"
+		part 17
+		doif game "music_volume" = -10000
+			pose 0
+		elif game "music_volume" = 0
+			pose 4
+		elif game "music_volume" = -1000
+			pose 3
+		elif game "music_volume" = -3000
+			pose 2
+		elif game "music_volume" = -4000
+			pose 1
+		endi
+	elif name "vol" = "sfx"
+		part 17
+		doif game "sfx_volume" = -10000
+			pose 0
+		elif game "sfx_volume" = 0
+			pose 4
+		elif game "sfx_volume" = -1000
+			pose 3
+		elif game "sfx_volume" = -3000
+			pose 2
+		elif game "sfx_volume" = -4000
+			pose 1
+		endi
+	endi
+
+
+
+
+** What state are the voices supposed to be in now?
+	doif game "engine_dumb_creatures" = 0
+		part 18
+		pose 0
+		part 12
+		frmt 0 0 0 0 0 0 0
+		ptxt read "Option Text" 8
+	elif game "engine_dumb_creatures" = 1
+		part 18
+		pose 1
+		part 12
+		frmt 0 0 0 0 0 0 0
+		ptxt read "Option Text" 9
+	endi
+
+
+
+
+*check and change the sfx option
+	subr sfx_
+		part 3
+		doif pose eq 0
+			pose 1
+			sets va52 read "Option Text" 5
+			part 9
+			ptxt va52
+		endi
+	retn
+*check and change the music option
+	subr musi
+		part 4
+		doif pose eq 0
+			pose 1
+			sets va52 read "Option Text" 7
+			part 10
+			ptxt va52
+		endi
+	retn
+*check both, make sure not set
+	subr none
+		part 3
+		doif pose eq 1
+			pose 0
+			sets va52 read "Option Text" 4
+			part 9
+			ptxt va52
+		endi
+		part 4
+		doif pose eq 1
+			pose 0
+			sets va52 read "Option Text" 6
+			part 10
+			ptxt va52
+		endi
+	retn
+endm
+
+** Scripts below this point are new or changed for Docking Station.
+
+** Red
+scrp 1 2 12 1011
+	lock
+	doif name "hand" = "custom"
+		snde "2bep"
+		doif game "pntr_Red" <= 240
+			addv game "pntr_Red" 32
+			doif game "pntr_Red" = 256
+				setv game "pntr_Red" 255
+			endi
+		elif game "pntr_Red" = 255
+			setv game "pntr_Red" 0
+		endi
+		part 14
+		tint game "pntr_Red" 0 0 128 128
+		part 13
+		tint game "pntr_Red" game "pntr_Green" game "pntr_Blue" 128 128
+		targ pntr
+		tint game "pntr_Red" game "pntr_Green" game "pntr_Blue" 128 128
+** update indicator
+		targ ownr
+		setv va00 game "pntr_Red"
+		addv va00 1
+		divv va00 32
+		part 27
+		frmt 0 0 0 0 0 0 0
+		ptxt vtos va00
+	else
+		snde "buzz"
+	endi
+endm
+** Green
+scrp 1 2 12 1012
+	lock
+	doif name "hand" = "custom"
+		snde "2bep"
+		doif game "pntr_Green" <= 240
+			addv game "pntr_Green" 32
+			doif game "pntr_Green" = 256
+				setv game "pntr_Green" 255
+			endi
+		elif game "pntr_Green" = 255
+			setv game "pntr_Green" 0
+		endi
+		part 15
+		tint 0 game "pntr_Green" 0 128 128
+		part 13
+		tint game "pntr_Red" game "pntr_Green" game "pntr_Blue" 128 128
+		targ pntr
+		tint game "pntr_Red" game "pntr_Green" game "pntr_Blue" 128 128
+** update indicator
+		targ ownr
+		setv va00 game "pntr_Green"
+		addv va00 1
+		divv va00 32
+		part 28
+		frmt 0 0 0 0 0 0 0
+		ptxt vtos va00
+	else
+		snde "buzz"
+	endi
+endm
+** Blue
+scrp 1 2 12 1013
+	lock
+	doif name "hand" = "custom"
+		snde "2bep"
+		doif game "pntr_Blue" <= 240
+			addv game "pntr_Blue" 32
+			doif game "pntr_Blue" = 256
+				setv game "pntr_Blue" 255
+			endi
+		elif game "pntr_Blue" = 255
+			setv game "pntr_Blue" 0
+		endi
+		part 16
+		tint 0 0 game "pntr_Blue" 128 128
+		part 13
+		tint game "pntr_Red" game "pntr_Green" game "pntr_Blue" 128 128
+		targ pntr
+		tint game "pntr_Red" game "pntr_Green" game "pntr_Blue" 128 128
+** update indicator
+		targ ownr
+		setv va00 game "pntr_Blue"
+		addv va00 1
+		divv va00 32
+		part 29
+		frmt 0 0 0 0 0 0 0
+		ptxt vtos va00
+	else
+		snde "buzz"
+	endi
+endm
+
+** Screen Toggle
+scrp 1 2 12 1014
+	lock
+	part 19
+	pose 1
+	wait 5
+	pose 0
+	doif name "screen" = "full"
+		sets va00 read "Option Text" 10
+		sets name "screen" "windowed"
+		wdow
+	elif name "screen" = "windowed"
+		sets va00 read "Option Text" 11
+		sets name "screen" "full"
+		wdow
+	endi
+	part 20
+	frmt 0 0 0 0 0 0 2
+	ptxt va00
+endm
+
+*option effects
+scrp 1 2 12 1002
+	lock
+	inst
+	sndc "lg_1"
+	part 3
+	doif pose eq 0
+		pose 1
+		sets va52 read "Option Text" 5
+		part 9
+		ptxt va52
+** Take away all those squealing voices!!!
+		part 18
+		pose 1
+		setv game "engine_dumb_creatures" 1
+		part 12
+		frmt 0 0 0 0 0 0 0
+		ptxt read "Option Text" 9
+	else
+		pose 0
+		sets va52 read "Option Text" 4
+		part 9
+		ptxt va52
+	endi
+	setv va00 mute 3 1
+endm
+
+** Norn Burble On/Off
+scrp 1 2 12 1015
+	inst
+	lock
+	sndc "lg_1"
+
+	setv va00 mute 3 0
+
+	doif va00 = 1 or va00 = 3
+		gsub sfx_
+	endi
+
+
+	doif game "engine_dumb_creatures" = 0
+		part 18
+		pose 1
+		setv game "engine_dumb_creatures" 1
+		part 12
+		frmt 0 0 0 0 0 0 0
+		ptxt read "Option Text" 9
+	elif game "engine_dumb_creatures" = 1
+
+** Force SFX back on!
+		part 3
+		doif pose <> 0
+			pose 0
+			sets va52 read "Option Text" 4
+			part 9
+			ptxt va52
+		endi
+
+** Un-dumb-em :-)
+		part 18
+		pose 0
+		setv game "engine_dumb_creatures" 0
+		part 12
+		frmt 0 0 0 0 0 0 0
+		ptxt read "Option Text" 8
+	endi
+
+*check and change the sfx option
+	subr sfx_
+		part 3
+		doif pose eq 1
+			pose 0
+			sets va52 read "Option Text" 4
+			part 9
+			ptxt va52
+		endi
+	retn
+
+endm
+
+** Volume Toggle
+scrp 1 2 12 1026
+	lock
+	inst
+** Update own pose
+	doif name "vol" = "music"
+		sets name "vol" "sfx"
+		part 26
+		pose 1
+		setv va00 0
+	elif name "vol" = "sfx"
+		sets name "vol" "music"
+		part 26
+		pose 0
+		setv va00 2
+	endi
+** Update Volume Control
+	setv va01 volm va00
+	doif va01 = 0
+		setv va02 4
+	elif va01 = -1000
+		setv va02 3
+	elif va01 = -3000
+		setv va02 2
+	elif va01 = -4000
+		setv va02 1
+	elif va01 = -10000
+		setv va02 0
+	endi
+	part 17
+	pose va02
+endm
+
+
+** Volume Control
+scrp 1 2 12 1016
+	lock
+	inst
+	snde "3bep"
+	doif name "vol" = "music"
+		setv va00 volm 2
+		doif va00 = 0
+			volm 2 -10000
+			setv game "music_volume" -10000
+			part 17
+			pose 0
+		elif va00 = -1000
+			volm 2 0
+			setv game "music_volume" 0
+			part 17
+			pose 4
+		elif va00 = -3000
+			volm 2 -1000
+			setv game "music_volume" -1000
+			part 17
+			pose 3
+		elif va00 = -4000
+			volm 2 -3000
+			setv game "music_volume" -3000
+			part 17
+			pose 2
+		elif va00 = -10000
+			volm 2 -4000
+			setv game "music_volume" -4000
+			part 17
+			pose 1
+		endi
+	elif name "vol" = "sfx"
+		setv va00 volm 0
+		doif va00 = 0
+			volm 0 -10000
+			setv game "sfx_volume" -10000
+			part 17
+			pose 0
+		elif va00 = -1000
+			volm 0 0
+			setv game "sfx_volume" 0
+			part 17
+			pose 4
+		elif va00 = -3000
+			volm 0 -1000
+			setv game "sfx_volume" -1000
+			part 17
+			pose 3
+		elif va00 = -4000
+			volm 0 -3000
+			setv game "sfx_volume" -3000
+			part 17
+			pose 2
+		elif va00 = -10000
+			volm 0 -4000
+			setv game "sfx_volume" -4000
+			part 17
+			pose 1
+		endi
+	endi
+endm
+
+** Custom / Normal Hand Mode 
+scrp 1 2 12 1017
+	lock
+	snde "2bep"
+	part 21
+	pose 1
+	doif name "hand" = "normal"
+		inst
+		sets name "hand" "custom"
+** Brighten Tint Panels and hand
+		part 14
+		pose 0
+		part 15
+		pose 0
+		part 16
+		pose 0
+		part 13
+		alph 0 0
+** brighten tint indicators
+		part 27
+		alph 0 0
+		part 28
+		alph 0 0
+		part 29
+		alph 0 0
+** Tint the hand
+		targ pntr
+		tint game "pntr_Red" game "pntr_Green" game "pntr_Blue" 128 128
+** Update Text
+		targ ownr
+		part 22
+		frmt 0 0 0 0 0 0 0
+		ptxt read "Option Text" 13
+	elif name "hand" = "custom"
+		inst
+		sets name "hand" "normal"
+** Dull Tint Panels and hand
+		part 14
+		pose 1
+		part 15
+		pose 1
+		part 16
+		pose 1
+		part 13
+		alph 128 1
+** dull tint indicators
+		part 27
+		alph 255 1
+		part 28
+		alph 255 1
+		part 29
+		alph 255 1
+** Tint the hand
+		targ pntr
+		tint 128 128 128 128 128
+** Update Text
+		targ ownr
+		part 22
+		frmt 0 0 0 0 0 0 0
+		ptxt read "Option Text" 12
+	endi
+	part 21
+	pose 0
+endm
+
+** Total Population
+scrp 1 2 12 1024
+	inst
+	snde "2bep"
+	part 24
+	setv va00 stoi ptxt
+	doif va00 >= 2
+		setv va03 game "breeding_limit"
+		addv va03 2
+		doif va00 >= va03
+			setv game "total_population" va00
+** Update Total Population (doesn't effect Breeding Limit)
+			part 24
+			frmt 0 0 0 0 0 0 2
+			sets va99 "<tint 110 255 110>"
+			adds va99 vtos va00
+			ptxt va99
+		else
+			setv game "total_population" va00
+			setv va01 va00
+			subv va01 2
+			setv game "breeding_limit" va01
+** Update Total Population
+			part 24
+			frmt 0 0 0 0 0 0 2
+			sets va99 "<tint 110 255 110>"
+			adds va99 vtos va00
+			ptxt va99
+** Update Breeding Limit
+			part 25
+			frmt 0 0 0 0 0 0 2
+			sets va99 "<tint 110 255 110>"
+			adds va99 vtos va01
+			ptxt va99
+		endi
+	else
+		snde "buzz"
+		setv game "total_population" 2
+		setv game "breeding_limit" 0
+** Update Total Population
+		part 24
+		frmt 0 0 0 0 0 0 2
+		ptxt "<tint 175 225 127>0"
+** Update Breeding Limit
+		part 25
+		frmt 0 0 0 0 0 0 2
+		ptxt "<tint 175 225 127>0"
+	endi
+	rgam
+	targ game "c3_default_focus"
+	part game "c3_default_focus_part"
+	fcus
+endm
+
+** Creature Breeding Limit
+scrp 1 2 12 1025
+	inst
+	snde "2bep"
+	part 25
+	setv va00 stoi ptxt
+	doif va00 >= 0
+		setv va03 game "total_population"
+		subv va03 2
+		doif va00 <= va03
+			setv game "breeding_limit" va00
+** Update Breeding Limit (doesn't effect Total Population)
+			part 25
+			frmt 0 0 0 0 0 0 2
+			sets va99 "<tint 110 255 110>"
+			adds va99 vtos va00
+			ptxt va99
+		else
+			setv game "breeding_limit" va00
+			setv va02 va00
+			addv va02 2
+			setv game "total_population" va02
+** Update Total Population
+			part 24
+			frmt 0 0 0 0 0 0 2
+			sets va99 "<tint 110 255 110>"
+			adds va99 vtos va02
+			ptxt va99
+** Update Breeding Limit
+			part 25
+			frmt 0 0 0 0 0 0 2
+			sets va99 "<tint 110 255 110>"
+			adds va99 vtos va00
+			ptxt va99
+		endi
+	else
+		snde "buzz"
+		setv game "breeding_limit" 0
+** Update Breeding Limit
+		part 25
+		frmt 0 0 0 0 0 0 2
+		ptxt "<tint 175 225 127>0"
+	endi
+	rgam
+	targ game "c3_default_focus"
+	part game "c3_default_focus_part"
+	fcus
+endm
+
+*******options events
+scrp 1 2 12 1020
+	lock
+	doif ov99 = -1
+		sndc "gui1"
+*		clac -1
+		velo -20 0
+		wait 8
+		velo -20 0
+		wait 7
+		velo -5 0
+		wait 6
+		velo 0 0
+** 
+		mvby -2 0
+		mvby -2 0
+*change in/out state
+		negv ov99
+*	clac 1
+	elif ov99 = 1
+** Update Population Limits
+		call 1024 0 0
+		call 1025 0 0
+		wait 1
+		part 11
+** Update Hand Name
+		hand ptxt
+		targ ownr
+		sndc "gui3"
+*		clac -1
+** move it! :)
+		velo 20 0
+		wait 8
+		velo 20 0
+		wait 6
+		velo 6 0
+		wait 6
+		velo 0 0
+		setv va10 wndw
+		subv va10 ov10
+		flto va10 ov11
+*change in/out state
+		negv ov99
+*	clac 0
+	endi
+endm
+
+
+** Timer
+** Updates screen mode (in case it was changed in a way other than the screen mode button)
+scrp 1 2 12 9
+	inst
+	doif wdow = 0
+		sets name "screen" "windowed"
+		sets va00 read "Option Text" 10
+	elif wdow = 1
+		sets name "screen" "full"
+		sets va00 read "Option Text" 11
+	endi
+	part 20
+	frmt 0 0 0 0 0 0 2
+	ptxt va00
+endm
+
+** Mouse Down script!
+scrp 1 2 12 76
+	inst
+	lock
+	setv va00 _p1_
+	seta va01 hots
+	setv va02 hotp
+** if it is the left mouse button...
+	doif va00 = 1
+** if the mouse is over the options menu
+		doif va01 = ownr
+** if the part is one of the population limits
+			doif va02 = 24
+** Update Population Limits
+				call 1024 0 0
+				call 1025 0 0
+				part 24
+				sets va00 ptxt
+				frmt 0 0 0 0 0 0 2
+				sets va01 "<tint 255 110 110>"
+				adds va01 va00
+				ptxt va01
+			elif va02 = 25
+** Update Population Limits
+				call 1024 0 0
+				call 1025 0 0
+				part 25
+				sets va00 ptxt
+				frmt 0 0 0 0 0 0 2
+				sets va01 "<tint 255 110 110>"
+				adds va01 va00
+				ptxt va01
+			endi
+		endi
+	endi
+endm
+
+
+
+** Remove Script
+rscr
+enum 1 2 12
+	kill targ
+next
+enum 1 2 34
+	kill targ
+next
